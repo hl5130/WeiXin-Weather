@@ -30,6 +30,8 @@ Page({
     nowWeather: '晴天',
     nowWeatherBg: '/images/sunny-bg.png',
     forecast: [],
+    todayTime: "",
+    todayTemp: "",
   },
 
   /**
@@ -108,6 +110,7 @@ Page({
         console.log(result)
         that.setNow(result)
         that.setHourlyWeather(result)   
+        that.setToday(result)
       },
       complete: () => {  // 无论request 成功还是失败都会调用此方法
         // 关闭下拉刷新
@@ -133,6 +136,10 @@ Page({
       backgroundColor: weatherColorMap[weather],
     })
   },
+
+  /**
+   *  设置24小时温度
+   */
   setHourlyWeather(result){
     // 天气预测
     let nowHour = new Date().getHours()
@@ -148,6 +155,28 @@ Page({
     forecast_local[0].time = "现在"
     this.setData({
       forecast: forecast_local
+    })
+  },
+
+  /**
+   *  设置今天的时间和最高最低温度
+   */
+  setToday(result){
+    let today = result.today
+    let date = new Date()
+    this.setData({
+      todayTime: `${date.getFullYear()}-${date.getMonth() + 1}-${date.getDate()} 今天`,
+      todayTemp: `${today.minTemp}° - ${today.maxTemp}°`
+      // todayTemp: today.minTemp + '° - ' + today.maxTemp + '°'
+    })
+  },
+
+/**
+ *  weather-today 视图的点击事件
+ */
+  onTodayWeatherTap(){
+    wx.navigateTo({
+      url: '/pages/list/list',
     })
   }
 })
