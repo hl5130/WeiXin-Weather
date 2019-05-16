@@ -28,7 +28,8 @@ Page({
   data: {
     nowTemp: '0°',
     nowWeather: '晴天',
-    nowWeatherBg: '/images/sunny-bg.png'
+    nowWeatherBg: '/images/sunny-bg.png',
+    forecast: [],
   },
 
   /**
@@ -97,41 +98,56 @@ Page({
     wx.request({
       url: "https://test-miniprogram.com/api/weather/now", // 天气API
       data: {
-        city: "上海市"
+        city: "重庆市"
       },
       header: {
         'content-type': 'application/json' // 默认值
       },
       success(res) {
         let result = res.data.result
-        let now = res.data.result.now
-        let temp = res.data.result.now.temp
-        let weather = res.data.result.now.weather
-        let weather_chinese = weatherMap[weather]
-
-        console.log(res.data)
         console.log(result)
-        console.log(now)
-        console.log(temp)
-        console.log(weather)
-
-        // 更新界面
-        that.setData({
-          nowTemp: temp + '°',
-          nowWeather: weather_chinese,
-          nowWeatherBg: '/images/' + weather + '-bg.png'
-        })
-        // 设置 NavigationBarColor
-        wx.setNavigationBarColor({
-          frontColor: '#000000',
-          backgroundColor: weatherColorMap[weather],
-        })
+        that.setNow(result)
+        that.setHourlyWeather(result)   
       },
       complete: () => {  // 无论request 成功还是失败都会调用此方法
         // 关闭下拉刷新
         callback && callback()
       }
     })
-
+  },
+  /**
+   *  设置 nowWeather
+   */
+  setNow(result){
+    let weather = result.now.weather
+    let temp = result.now.temp
+    // 更新界面
+    this.setData({
+      nowTemp: temp + '°',
+      nowWeather: weatherMap[weather],
+      nowWeatherBg: '/images/' + weather + '-bg.png',
+    })
+    // 设置 NavigationBarColor
+    wx.setNavigationBarColor({
+      frontColor: '#000000',
+      backgroundColor: weatherColorMap[weather],
+    })
+  },
+  setHourlyWeather(result){
+    // 天气预测
+    let nowHour = new Date().getHours()
+    let forecast_local = result.forecast
+    for (var i = 0; i < forecast_local.length; i++) {
+      forecast_local[i].time = (nowHour + i * 3) % 24 + '时'
+      let weather = forecast_local[i].weather
+      forecast_local[i].weather = '/images/' + weather + '-icon.png'
+      let temp = forecast_local[i].temp
+      forecast_local[i].temp = temp + '°'
+      // console.log(forecast_local[i])
+    }
+    forecast_local[0].time = "现在"
+    this.setData({
+      forecast: forecast_local
+    })
   }
 })
