@@ -17,7 +17,7 @@
 .weather-wrapper {
   position: relative;
   width: 750rpx;
-  padding-top: 174rpx;
+  padding-top: 20rpx;
   padding-bottom: 250rpx;
 }
 
@@ -32,7 +32,7 @@
   z-index: -1;
 }
 
-.weather-today{
+.weather-today {
   display: flex;
   align-items: center;
   position: absolute;
@@ -85,12 +85,13 @@
 /* 
   flex-shrink: 0; 添加了此属性，就不能自动压缩，每一个item的width都是我们指定的120rpx了
  */
+
 .forecast-item {
   display: flex;
   flex-direction: column;
   flex-shrink: 0;
   width: 120rpx;
-  align-items: center
+  align-items: center;
 }
 
 .forecast-time {
@@ -108,4 +109,32 @@
   margin-top: 46rpx;
   font-size: 40rpx;
   line-height: 56rpx;
+}
+
+/* 154 = 60+42+42+10 */
+.location-wrapper {
+  margin-bottom: 60rpx;  
+  font-size: 30rpx;
+  line-height: 42rpx;
+  color: rgba(0, 0, 0, 0.5)!important;
+  border: none!important;
+  padding: 0!important;
+}
+
+.location-city {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.location-icon {
+  width: 21rpx;
+  height: 30rpx;
+  margin-right: 10rpx;
+}
+
+.location-tip {
+  height: 42rpx; /*固定高度, 没字时也有高度*/
+  margin-top: 10rpx;
+  text-align: center;
 }

@@ -1,2 +1,11 @@
 <!--pages/list/list.wxml-->
-<text>Hello</text>
+<scroll-view>
+  <view class='weather-item' wx:for="{{dateWeathers}}">
+    <view>
+      <view class='day'>{{ item.day }}</view>
+      <view class='date'>{{ item.date }}</view>
+    </view>
+    <view class='weather-temp'>{{ item.temp }}</view>
+    <image class='weather-icon' src="{{ item.weather_icon }}"></image>
+  </view>
+</scroll-view>
